@@ -1,0 +1,73 @@
+
+.mine-count div,
+.timer div {
+	background: #000;
+	position: relative;
+	display: inline-block;
+	width: 42px;
+	//height: 27px;
+	padding: 0;
+	text-align: center;
+	border-radius: 4px;
+	border: 0;
+	box-shadow: 0 0 0;
+	font-size: 0;
+
+	&:after {
+		content: '';
+		background: url('~/res/img/sprite.png') -7px -160px no-repeat;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	span {
+		background: url('~/res/img/sprite.png') -1px -106px no-repeat;
+		display: inline-block;
+		width: 10px;
+		height: 18px;
+		margin: 1px 1px 0 1px;
+
+		&.d0 { background-position: -1px -106px; }
+		&.d1 { background-position: -14px -106px; }
+		&.d2 { background-position: -27px -106px; }
+		&.d3 { background-position: -40px -106px; }
+		&.d4 { background-position: -53px -106px; }
+		&.d5 { background-position: -1px -127px; }
+		&.d6 { background-position: -14px -127px; }
+		&.d7 { background-position: -27px -127px; }
+		&.d8 { background-position: -40px -127px; }
+		&.d9 { background-position: -53px -127px; }
+	}
+}
+
+.timer div {
+	float: right;
+
+	&:after {
+		transform: rotateY(180deg);
+	}
+}
+
+.icon-smiley {
+	&:after {
+		content: '';
+		background: url('~/res/img/sprite.png') -29px -81px;
+		position: absolute;
+		top: 0;
+		left: 50%;
+		margin-left: -10px;
+		width: 20px;
+		height: 20px;
+		.transform( scale(0.9) );
+	}
+
+	&.sad:after {
+		background-position: -55px -81px;
+	}
+
+	&.cool:after {
+		background-position: -81px -81px;
+	}
+}

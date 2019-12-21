@@ -1,0 +1,19 @@
+<ToolBar>
+	<Group width="20%" class="mine-count">
+		<Field>
+			<span class="d0"></span>
+			<span class="d0"></span>
+			<span class="d0"></span>
+		</Field>
+	</Group>
+	<Group width="60%" align="center" class="smiley">
+		<Tool class="icon-smiley" click="new-game"/>
+	</Group>
+	<Group width="20%" class="timer">
+		<Field>
+			<span class="d0"></span>
+			<span class="d0"></span>
+			<span class="d0"></span>
+		</Field>
+	</Group>
+</ToolBar>

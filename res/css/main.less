@@ -1,0 +1,41 @@
+
+content {
+	background: #ccc;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 8px;
+
+	.game-board {
+		display: block;
+		//width: 426px;
+		//height: 426px;
+		border: 5px solid;
+		border-color: #888 #eee #eee #888;
+		.clearfix;
+
+		> div {
+			background: url('~/res/img/sprite.png') 0px 0px no-repeat;
+			float: left;
+			width: 26px;
+			height: 26px;
+	
+			&.mines0	{ background-position: -26px 0px; }
+			&.mines1	{ background-position: 0px -26px; }
+			&.mines2	{ background-position: -26px -26px; }
+			&.mines3	{ background-position: -52px -26px; }
+			&.mines4	{ background-position: -78px -26px; }
+			&.mines5	{ background-position: 0px -52px; }
+			&.mines6	{ background-position: -26px -52px; }
+
+			&.blank		{ background-position: 0px 0px; }
+			&.flag		{ background-position: -52px -52px; }
+			&.mine		{ background-position: -78px 0px; }
+			&.qmark		{ background-position: -78px -52px; }
+			&.red		{ background-position: -52px 0px; }
+			&.cross		{ background-position: 0px -78px; }
+		}
+	}
+}
