@@ -35,6 +35,9 @@ const mines = {
 		
 		switch (cmd) {
 			// custom events
+			case "open-help":
+				defiant.shell("fs -u '~/help/index.md'");
+				break;
 			case "select-block":
 				block = event.target;
 				x = block.getAttribute("X");

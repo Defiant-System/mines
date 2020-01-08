@@ -1,6 +1,6 @@
 
 <h1>
-	<img src="/res/icons/app-icon-mines" style="float: left; width: 42px; margin: 3px 5px 0 0;">
+	<img src="~/icon.svg" style="float: left; width: 42px; margin: 3px 5px 0 0;">
 	Mines
 </h1>
 
