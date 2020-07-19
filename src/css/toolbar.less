@@ -1,26 +1,27 @@
 
-.mine-count div,
-.timer div {
+.toolbar-group_.mine-count div,
+.toolbar-group_.timer div {
 	background: #000;
 	position: relative;
 	display: inline-block;
-	width: 42px;
-	//height: 27px;
-	padding: 0;
+	width: 52px;
+	height: 23px;
+	padding: 1px 0 0;
 	text-align: center;
-	border-radius: 4px;
+	border-radius: 3px;
 	border: 0;
 	box-shadow: 0 0 0;
 	font-size: 0;
 
 	&:after {
 		content: '';
-		background: url('~/img/sprite.png') -7px -160px no-repeat;
+		background: url('~/img/sprite.png') 1px -160px no-repeat;
 		position: absolute;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
+		opacity: .9;
 	}
 	span {
 		background: url('~/img/sprite.png') -1px -106px no-repeat;
