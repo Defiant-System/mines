@@ -1,6 +1,6 @@
 <MenuBar>
 	<Menu name="Mines">
-		<Menu name="About Mines"/>
+		<Menu name="About Mines" shell="win -a"/>
 		<Menu type="divider"/>
 		<Menu name="New Game" click="new-game"/>
 		<Menu name="Difficulty">
