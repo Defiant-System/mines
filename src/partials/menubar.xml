@@ -9,10 +9,6 @@
 			<Menu name="Expert" check-group="game-option" click="new-game" arg="99"/>
 		</Menu>
 		<Menu type="divider"/>
-		<Menu name="Hide Mines"/>
-		<Menu name="Hide Others"/>
-		<Menu name="Show All" disabled="1"/>
-		<Menu type="divider"/>
 		<Menu name="Quit Mines" shell="win -c"/>
 	</Menu>
 	<Menu name="Help">
