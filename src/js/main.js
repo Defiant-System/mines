@@ -4,6 +4,7 @@ const sizes = {
 	"20": {w: 442, h: 443, x: 16, y: 16},
 	"99": {w: 807, h: 443, x: 30, y: 16}
 };
+let board;
 let nMines = 20;
 let start_time = 0;
 let PreFld = false;
