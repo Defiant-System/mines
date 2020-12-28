@@ -24,6 +24,8 @@ const mines = {
 		this.el.solvedSpan = window.find(".seconds-solved");
 		
 		this.dispatch({type: "new-game", arg: "20"});
+
+		// setTimeout(() => defiant.shell("win -a"), 500);
 	},
 	dispatch(event) {
 		let self = mines,
