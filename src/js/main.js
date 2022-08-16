@@ -25,7 +25,7 @@ const mines = {
 		
 		this.dispatch({type: "new-game", arg: "20"});
 
-		// setTimeout(() => defiant.shell("win -a"), 500);
+		// setTimeout(() => karaqu.shell("win -a"), 500);
 	},
 	dispatch(event) {
 		let self = mines,
@@ -39,7 +39,7 @@ const mines = {
 		switch (cmd) {
 			// custom events
 			case "open-help":
-				defiant.shell("fs -u '~/help/index.md'");
+				karaqu.shell("fs -u '~/help/index.md'");
 				break;
 			case "select-block":
 				block = event.target;
