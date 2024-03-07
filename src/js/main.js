@@ -1,9 +1,12 @@
 
-const sizes = {
-	"10": {w: 260, h: 261, x: 9, y: 9},
-	"20": {w: 441, h: 447, x: 16, y: 16},
-	"99": {w: 807, h: 443, x: 30, y: 16}
-};
+@import "test.js"
+
+
+let sizes = {
+		"10": {w: 260, h: 266, x: 9, y: 9},
+		"20": {w: 441, h: 447, x: 16, y: 16},
+		"99": {w: 807, h: 448, x: 30, y: 16}
+	};
 let board;
 let nMines = 20;
 let start_time = 0;
@@ -13,30 +16,34 @@ let timer_started = false;
 let game_over = true;
 let SelX, SelY;
 
+
+
 const mines = {
 	el: {},
 	init() {
 		// fast references
+		this.el.content = window.find("content");
 		this.el.board = window.find(".game-board");
 		this.el.smiley = window.find(".icon-smiley");
 		this.el.timerSpan = window.find(".timer span");
 		this.el.countSpan = window.find(".mine-count span");
 		this.el.solvedSpan = window.find(".seconds-solved");
 		
-		this.dispatch({type: "new-game", arg: "20"});
+		this.dispatch({ type: "new-game", arg: "20" });
 
-		// setTimeout(() => karaqu.shell("win -a"), 500);
+		// DEV-ONLY-START
+		Test.init(this);
+		// DEV-ONLY-END
 	},
 	dispatch(event) {
-		let self = mines,
-			cmd = typeof(event) === "object" ? event.type : event,
+		let Self = mines,
 			nn,
 			x, y,
 			str,
 			now,
 			block;
 		
-		switch (cmd) {
+		switch (event.type) {
 			// custom events
 			case "open-help":
 				karaqu.shell("fs -u '~/help/index.md'");
@@ -54,42 +61,43 @@ const mines = {
 				if (!timer_started && game_over === "new_board") {
 					timer_started = true;
 					game_over = false;
-					self.dispatch("start-timer");
+					Self.dispatch({ type: "start-timer" });
 				}
 
 				if (event.button <= 1 && (!event.ctrlKey && !event.metaKey)) {
-					if (Fld[SelX][SelY]==0) {
-						if (PreFld[SelX][SelY]>=0) {
-							self.showFld(SelX, SelY);
-							self.checkOver(); 
+					if (Fld[SelY][SelX]==0) {
+						if (PreFld[SelY][SelX]>=0) {
+							Self.showFld(SelX, SelY);
+							Self.checkOver(); 
 						} else {
-							Fld[SelX][SelY]=-1;
-							self.setOver();
+							Fld[SelY][SelX]=-1;
+							Self.setOver();
 						}
 					}
+					// console.log( PreFld.join(":") );
+					// console.log( Fld.join(":") );
 				} else {
-					if (Fld[SelX][SelY] >= 0) {
-						Fld[SelX][SelY]++;
-						Fld[SelX][SelY] %= 3;
-						if (Fld[SelX][SelY] == 0) {
-							self.el.blocks[board.x * SelY + SelX].className = "blank";
+					if (Fld[SelY][SelX] >= 0) {
+						Fld[SelY][SelX]++;
+						Fld[SelY][SelX] %= 3;
+						if (Fld[SelY][SelX] == 0) {
+							Self.el.blocks[board.x * SelY + SelX].className = "blank";
 						}
-						if (Fld[SelX][SelY] == 1) {
-							self.el.blocks[board.x * SelY + SelX].className = "flag";
+						if (Fld[SelY][SelX] == 1) {
+							Self.el.blocks[board.x * SelY + SelX].className = "flag";
 						}
-						if (Fld[SelX][SelY] == 2) {
-							self.el.blocks[board.x * SelY + SelX].className = "qmark";
+						if (Fld[SelY][SelX] == 2) {
+							Self.el.blocks[board.x * SelY + SelX].className = "qmark";
 						}
-						self.flagCount();
-						self.checkOver();
+						Self.flagCount();
+						Self.checkOver();
 					}
 				}
 				break;
 			case "start-timer":
-				now = new Date();
-				start_time = now.getTime() / 1000;
+				start_time = event.seconds || Date.now();
 				// reset timer
-				self.timeCount();
+				Self.timeCount();
 				break;
 			case "close-success-dialog":
 				//neo.shell("win -dh success");
@@ -98,23 +106,23 @@ const mines = {
 				nMines = +event.arg || nMines
 				board = sizes[nMines];
 
-				PreFld = new Array(board.x);
-				Fld = new Array(board.x);
-				for (nn=0; nn < board.x; nn++) PreFld[nn] = new Array(board.y);
-				for (nn=0; nn < board.x; nn++) Fld[nn] = new Array(board.y);
+				PreFld = new Array(board.y);
+				Fld = new Array(board.y);
+				for (nn=0; nn < board.y; nn++) PreFld[nn] = new Array(board.x);
+				for (nn=0; nn < board.y; nn++) Fld[nn] = new Array(board.x);
 
 				// draw board
 				str = "";
 				for (y=0; y<board.y; y++) {
 					for (x=0; x<board.x; x++) {
-						PreFld[x][y] = 0;
-						Fld[x][y] = 0;
+						PreFld[y][x] = 0;
+						Fld[y][x] = 0;
 						str += `<div Y="${y}" X="${x}" class="blank"></div>`;
 					}
 				}
-				self.el.board.html(str);
+				Self.el.board.html(str);
 				// fast reference
-				self.el.blocks = mines.el.board.find("div");
+				Self.el.blocks = mines.el.board.find("div");
 
 				// update window dimensions
 				window.width = board.w;
@@ -124,17 +132,71 @@ const mines = {
 				while (nn < nMines) {
 					x = Math.round(Math.random() * 1000) % board.x;
 					y = Math.round(Math.random() * 1000) % board.y;
-					if (self.setMine(x, y)) nn++;
+					if (Self.setMine(x, y)) nn++;
 				}
 				// update smiley
-				self.el.smiley.removeClass("sad cool");
+				Self.el.smiley.removeClass("sad cool");
 
 				// update flag counter
-				self.flagCount();
+				Self.flagCount();
 
 				timer_started = false;
 				game_over = "new_board";
-				self.el.timerSpan.attr({"class": "d0"});
+				Self.el.timerSpan.attr({ "class": "d0" });
+				break;
+			case "game-from-pgn":
+				let pgn = event.pgn.split("\n"),
+					[size, seconds] = pgn[0].split(":").map(i => +i);
+
+				board = sizes[size];
+				PreFld = pgn[1].split(":").map(row => row.split(",").map(i => +i));
+				Fld = pgn[2].split(":").map(row => row.split(",").map(i => +i));
+				console.log( PreFld );
+				console.log( Fld );
+
+				// draw board
+				str = [];
+				for (y=0; y<board.y; y++) {
+					for (x=0; x<board.x; x++) {
+						let cell = "mines0";
+						if (PreFld[y][x] === 0) cell = "blank";
+						else if (Fld[y][x] > 0) cell = `mines${Fld[y][x]}`;
+						else if (Fld[y][x] < 0) cell = "red";
+						else if (Fld[y][x] === 1) cell = "flag";
+						else if (Fld[y][x] === 2) cell = "qmark";
+						str.push(`<div Y="${y}" X="${x}" class="${cell}"></div>`);
+					}
+				}
+				Self.el.board.html(str.join(""));
+				// fast reference
+				Self.el.blocks = mines.el.board.find("div");
+
+				// update window dimensions
+				window.width = board.w;
+				window.height = board.h;
+
+				// start timer
+				timer_started = true;
+				game_over = false;
+				seconds = Date.now() - (seconds * 1000);
+				Self.dispatch({ type: "start-timer", seconds });
+				break;
+			case "set-theme":
+				Self.el.content.data({ theme: event.arg });
+				break;
+			case "output-pgn":
+				str = [];
+
+				Object.keys(sizes).map(key => {
+					if (JSON.stringify(sizes[key]) === JSON.stringify(board)) {
+						let seconds = parseInt((Date.now() - start_time) / 1000, 10);
+						str.push(`${key}:${seconds}`);
+					}
+				});
+				
+				str.push(Fld.join(":"));
+				str.push(PreFld.join(":"));
+				console.log( str.join("\n") );
 				break;
 		}
 	},
@@ -148,8 +210,7 @@ const mines = {
 		}
 	},
 	timeCount() {
-		let now = new Date();
-		let seconds = parseInt((now.getTime() / 1000) - start_time, 10);
+		let seconds = parseInt((Date.now() - start_time) / 1000, 10);
 		let i = this.el.timerSpan.length;
 
 		if (seconds > 1000 || game_over) return;
@@ -163,23 +224,23 @@ const mines = {
 	setMine(xx, yy) {
 		let ddy;
 		let ddx;
-		if (PreFld[xx][yy] < 0) return false;
+		if (PreFld[yy][xx] < 0) return false;
 
-		for (let ddx = -1; ddx <= 1; ddx++) {
-			for (ddy = -1; ddy <= 1; ddy++) {
-				if ((xx+ddx >= 0) && (xx + ddx < board.x) && (yy + ddy >= 0) && (yy + ddy < board.x)) {
-					if (PreFld[xx + ddx][yy + ddy] === 6) return false;
-				}
-			}
-		}
-		for (ddx = -1; ddx <= 1; ddx++) {
-			for (ddy = -1; ddy <= 1; ddy++) {
+		for (ddy = -1; ddy <= 1; ddy++) {
+			for (ddx = -1; ddx <= 1; ddx++) {
 				if ((xx + ddx >= 0) && (xx + ddx < board.x) && (yy + ddy >= 0) && (yy + ddy < board.y)) {
-					if (PreFld[xx + ddx][yy + ddy] >= 0) PreFld[xx + ddx][yy + ddy]++;
+					if (PreFld[yy + ddy][xx + ddx] === 6) return false;
 				}
 			}
 		}
-		PreFld[xx][yy] = -1;
+		for (ddy = -1; ddy <= 1; ddy++) {
+			for (ddx = -1; ddx <= 1; ddx++) {
+				if ((xx + ddx >= 0) && (xx + ddx < board.x) && (yy + ddy >= 0) && (yy + ddy < board.y)) {
+					if (PreFld[yy + ddy][xx + ddx] >= 0) PreFld[yy + ddy][xx + ddx]++;
+				}
+			}
+		}
+		PreFld[yy][xx] = -1;
 		return true;
 	},
 	showFld(xxp, yyp) {
@@ -187,26 +248,26 @@ const mines = {
 		let yy = yyp;
 
 		if ((xx < 0) || (xx >= board.x) || (yy < 0) || (yy >= board.y)) return;
-		if (Fld[xx][yy] != 0) return;
-		Fld[xx][yy] = -1;
+		if (Fld[yy][xx] != 0) return;
+		Fld[yy][xx] = -1;
 		
-		this.el.blocks[board.x * yy + xx].className = "mines"+ PreFld[xx][yy];
+		this.el.blocks[board.x * yy + xx].className = "mines"+ PreFld[yy][xx];
 		
-		if (PreFld[xx][yy] != 0) return;
-		for (let ddx = -1; ddx <= 1; ddx++) {
-			for (let ddy = -1; ddy <= 1; ddy++) {
+		if (PreFld[yy][xx] != 0) return;
+		for (let ddy = -1; ddy <= 1; ddy++) {
+			for (let ddx = -1; ddx <= 1; ddx++) {
 				if ((ddx != 0) || (ddy != 0)) this.showFld(xx + ddx, yy + ddy);
 			}
 		}
 	},
 	setOver() {
-		for (let xx = 0; xx < board.x; xx++) {
-			for (let yy = 0; yy < board.y; yy++) {
-				if (PreFld[xx][yy] < 0) {
-					if (Fld[xx][yy] == -1) this.el.blocks[board.x * yy + xx].className = "red";
+		for (let yy = 0; yy < board.y; yy++) {
+			for (let xx = 0; xx < board.x; xx++) {
+				if (PreFld[yy][xx] < 0) {
+					if (Fld[yy][xx] == -1) this.el.blocks[board.x * yy + xx].className = "red";
 					else this.el.blocks[board.x * yy + xx].className = "mine";  
 				} else {
-					if (Fld[xx][yy] == 1) this.el.blocks[board.x * yy + xx].className = "cross";
+					if (Fld[yy][xx] == 1) this.el.blocks[board.x * yy + xx].className = "cross";
 				}
 			}
 		}
@@ -215,16 +276,15 @@ const mines = {
 		this.el.smiley.addClass("sad");
 	},
 	checkOver() {
-		for (let xx = 0; xx < board.x; xx++) {
-			for (let yy = 0; yy < board.y; yy++) {
-				if ((PreFld[xx][yy] < 0) && (Fld[xx][yy] != 1)) return;
-				if ((PreFld[xx][yy] >= 0) && (Fld[xx][yy] != -1)) return;
+		for (let yy = 0; yy < board.y; yy++) {
+			for (let xx = 0; xx < board.x; xx++) {
+				if ((PreFld[yy][xx] < 0) && (Fld[yy][xx] != 1)) return;
+				if ((PreFld[yy][xx] >= 0) && (Fld[yy][xx] != -1)) return;
 			}
 		}
 		game_over = true;
-		let now = new Date();
-		let end_time = now.getTime() / 1000;
-		let ii = Math.floor(end_time - start_time);
+		let end_time = Date.now();
+		let ii = Math.floor((end_time - start_time) / 1000);
 
 		// update smiley
 		this.el.smiley.addClass("cool");
