@@ -195,10 +195,12 @@ const mines = {
 
 				if (game_over) {
 					Self.timeCount();
-				} else {
+				} else if (seconds > 0) {
 					// start timer
 					timer_started = true;
 					Self.dispatch({ type: "start-timer", seconds });
+				} else {
+					game_over = "new_board";
 				}
 				break;
 			case "set-theme":
@@ -209,8 +211,10 @@ const mines = {
 
 				Object.keys(sizes).map(key => {
 					if (JSON.stringify(sizes[key]) === JSON.stringify(board)) {
-						let seconds = parseInt((Date.now() - start_time) / 1000, 10);
-						str.push(`${key}:${seconds}`);
+						let seconds = parseInt((Date.now() - start_time) / 1000, 10),
+							state = game_over && timer_started ? "over" : "game";
+						if (!timer_started) seconds = 0;
+						str.push(`${key}:${seconds}:${state}`);
 					}
 				});
 				

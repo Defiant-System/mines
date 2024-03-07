@@ -135,12 +135,13 @@ content {
 				&.mines4,
 				&.mines5,
 				&.mines6,
+				&.red,
 				&.mine {
 					background: rgba(#333,.1);
 					position: relative;
 					width: 24px;
 					height: 23px;
-					margin: 0 3px 3px -1px;
+					margin: 0 2px 3px 0;
 					box-shadow: inset 0 1px 2px rgba(#222,.15);
 
 					&:before {
@@ -209,11 +210,16 @@ content {
 					background-repeat: no-repeat;
 				}
 
+				&.red,
 				&.mine {
 					background-image: url(~/icons/icon-mine.png);
 					background-position: 50% 50%;
 					background-size: 19px 19px;
 					background-repeat: no-repeat;
+				}
+
+				&.red {
+					background-color: #f00;
 				}
 			}
 		}
