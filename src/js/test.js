@@ -1,7 +1,7 @@
 
 let Test = {
 	init(APP) {
-		// return;
+		return;
 
 		// setTimeout(() => APP.el.board.find(`div:nth(50)`).trigger("click"), 100);
 		// setTimeout(() => APP.el.board.find(`div:nth(51)`).trigger("click"), 120);
