@@ -25,7 +25,7 @@ content {
 			border-color: #888 #eee #eee #888;
 
 			> div {
-				background: url('~/img/sprite.png') 0px 0px no-repeat;
+				background: url(~/img/sprite.png) 0px 0px no-repeat;
 				float: left;
 				width: 26px;
 				height: 26px;
@@ -59,7 +59,7 @@ content {
 			padding: 9px 0 0 6px;
 			background: #669;
 			border-radius: 6px;
-			box-shadow: 0px 4px 0px 0px #558;
+			box-shadow: 0px 4px 0px 0px #224;
 			font-size: 0;
 
 			&:before {
@@ -68,9 +68,9 @@ content {
 				top: 0;
 				left: 0;
 				right: 0;
-				bottom: 0;
+				bottom: -4px;
 				border-radius: inherit;
-				background-image: radial-gradient(ellipse at bottom center, rgba(#fff,.35), transparent 200%);
+				background-image: radial-gradient(ellipse at bottom center, rgba(#fff,.35), transparent 170%);
 				pointer-events: none;
 			}
 
@@ -96,7 +96,7 @@ content {
 				font-size: 14px;
 				line-height: 1.75;
 				text-align: center;
-				text-shadow: 0 1px 1px rgba(#111,.2);
+				text-shadow: 0 2px 1px rgba(#111,.2);
 				border-radius: 4px;
 				margin: -3px 1px 5px 0;
 				box-shadow: inset 0 1px 0 rgba(#fff,.15),
@@ -134,15 +134,17 @@ content {
 				&.mines3,
 				&.mines4,
 				&.mines5,
-				&.mines6 {
+				&.mines6,
+				&.mine {
 					background: rgba(#333,.1);
 					position: relative;
-					width: 23px;
+					width: 24px;
 					height: 23px;
-					margin: 0 3px 3px 0;
+					margin: 0 3px 3px -1px;
 					box-shadow: inset 0 1px 2px rgba(#222,.15);
 
 					&:before {
+						bottom: -1px;
 						box-shadow: none;
 					}
 
@@ -165,21 +167,53 @@ content {
 				&.mines3:before {
 					content: "3";
 					color: #f34646;
+					text-shadow: 0 2px 2px rgba(#000,.2);
 				}
 
 				&.mines4:before {
 					content: "4";
-					color: #c4c32c;
+					color: #c42cc3;
+					text-shadow: 0 2px 2px rgba(#000,.2);
 				}
 
-				&.mines4:before {
+				&.mines5:before {
 					content: "5";
 					color: #b6540c;
+					text-shadow: 0 2px 2px rgba(#000,.2);
 				}
 
-				&.mines4:before {
+				&.mines6:before {
 					content: "6";
 					color: #5fd9e7;
+					text-shadow: 0 2px 2px rgba(#000,.2);
+				}
+
+				&.flag {
+					background-image: url(~/icons/icon-flag.png);
+					background-position: 50% 50%;
+					background-size: 19px 19px;
+					background-repeat: no-repeat;
+				}
+
+				&.qmark {
+					background-image: url(~/icons/icon-qmark.png);
+					background-position: 50% 50%;
+					background-size: 19px 19px;
+					background-repeat: no-repeat;
+				}
+
+				&.cross {
+					background-image: url(~/icons/icon-cross.png);
+					background-position: 50% 50%;
+					background-size: 19px 19px;
+					background-repeat: no-repeat;
+				}
+
+				&.mine {
+					background-image: url(~/icons/icon-mine.png);
+					background-position: 50% 50%;
+					background-size: 19px 19px;
+					background-repeat: no-repeat;
 				}
 			}
 		}

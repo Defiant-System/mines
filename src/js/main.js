@@ -95,7 +95,8 @@ const mines = {
 				}
 				break;
 			case "start-timer":
-				start_time = event.seconds || Date.now();
+				start_time = Date.now();
+				if (event.seconds) start_time -= event.seconds;
 				// reset timer
 				Self.timeCount();
 				break;
@@ -155,26 +156,28 @@ const mines = {
 				nMines = size;
 
 				board = sizes[+size];
-				PreFld = pgn[1].split(":").map(row => row.split(",").map(i => +i));
-				Fld = pgn[2].split(":").map(row => row.split(",").map(i => +i));
-				console.log( PreFld );
-				console.log( Fld );
+				Fld = pgn[1].split(":").map(row => row.split(",").map(i => +i));
+				PreFld = pgn[2].split(":").map(row => row.split(",").map(i => +i));
+				// console.log( PreFld );
+				// console.log( Fld );
 
 				// draw board
 				str = [];
 				for (y=0; y<board.y; y++) {
 					for (x=0; x<board.x; x++) {
 						let cell = "mines0";
-						if (PreFld[y][x] === 0) cell = "blank";
-						else if (PreFld[y][x] === 1) cell = "flag";
-						else if (PreFld[y][x] === 2) cell = "qmark";
-						else if (Fld[y][x] > 0) cell = `mines${Fld[y][x]}`;
-						else if (Fld[y][x] === -1) cell = "mine";
-						else if (Fld[y][x] === -2) cell = "red";
+						if (Fld[y][x] === 0) cell = "blank";
+						else if (Fld[y][x] === 1) cell = "flag";
+						else if (Fld[y][x] === 2) cell = "qmark";
+						else if (PreFld[y][x] > 0) cell = `mines${PreFld[y][x]}`;
+						else if (PreFld[y][x] === -1) cell = "mine";
+						else if (PreFld[y][x] === -2) cell = "red";
+						
+						// if (y == 0 && x == 0) console.log( Fld[y][x], cell );
 
 						if (game_over) {
-							if (Fld[y][x] === -1) cell = "mine";
-							if (PreFld[y][x] === 1 && Fld[y][x] !== -1) cell = "cross";
+							if (PreFld[y][x] === -1) cell = "mine";
+							if (Fld[y][x] === 1 && Fld[y][x] !== -1) cell = "cross";
 						}
 
 						str.push(`<div Y="${y}" X="${x}" class="${cell}"></div>`);
