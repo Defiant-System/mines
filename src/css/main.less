@@ -1,6 +1,6 @@
 
 content {
-	background: #ccc;
+	background: #111;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -10,12 +10,77 @@ content {
 
 	.game-board {
 		display: block;
+		position: relative;
 		width: 100%;
 		height: 100%;
-		border: 5px solid;
-		border-color: #888 #eee #eee #888;
+		padding: 6px 3px 0;
+		background: #777;
+		border-radius: 3px;
+		box-shadow: 0px 3px 0px 0px #666;
+		font-size: 0;
+
+		&:before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			border-radius: inherit;
+			background-image: radial-gradient(ellipse at bottom center, rgba(#fff,.35), transparent);
+			pointer-events: none;
+		}
+
+		&:after {
+			content: "";
+			background-image: linear-gradient(90deg, transparent, rgba(#fff,.5), transparent);
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 1px;
+			mix-blend-mode: soft-light;
+			pointer-events: none;
+		}
+
+		> div1 {
+			display: inline-block;
+			position: relative;
+			width: 26px;
+			height: 29px;
+			background: #888;
+			border-radius: 3px;
+			margin-top: -3px;
+			box-shadow: inset 0 0 0 1px rgba(#000,.025),
+						0px 3px 0px 0px #777;
+
+			&:before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				border-radius: inherit;
+				background-image: radial-gradient(ellipse at bottom center, rgba(#fff,.125), transparent);
+				pointer-events: none;
+			}
+
+			&:after {
+				content: "";
+				background-image: linear-gradient(90deg, transparent, rgba(#fff,.5), transparent);
+				position: absolute;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 1px;
+				mix-blend-mode: soft-light;
+				pointer-events: none;
+			}
+		}
 
 		> div {
+			// display: none;
 			background: url('~/img/sprite.png') 0px 0px no-repeat;
 			float: left;
 			width: 26px;
