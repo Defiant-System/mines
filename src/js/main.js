@@ -65,12 +65,12 @@ const mines = {
 				}
 
 				if (event.button <= 1 && (!event.ctrlKey && !event.metaKey)) {
-					if (Fld[SelY][SelX]==0) {
-						if (PreFld[SelY][SelX]>=0) {
+					if (Fld[SelY][SelX] == 0) {
+						if (PreFld[SelY][SelX] >= 0) {
 							Self.showFld(SelX, SelY);
 							Self.checkOver(); 
 						} else {
-							Fld[SelY][SelX]=-1;
+							Fld[SelY][SelX] = -1;
 							Self.setOver();
 						}
 					}
@@ -146,9 +146,15 @@ const mines = {
 				break;
 			case "game-from-pgn":
 				let pgn = event.pgn.split("\n"),
-					[size, seconds] = pgn[0].split(":").map(i => +i);
+					[size, seconds, state] = pgn[0].split(":");
 
-				board = sizes[size];
+				// game state + time
+				game_over = state === "over";
+				seconds = +seconds * 1000;
+				start_time = Date.now() - seconds;
+				nMines = size;
+
+				board = sizes[+size];
 				PreFld = pgn[1].split(":").map(row => row.split(",").map(i => +i));
 				Fld = pgn[2].split(":").map(row => row.split(",").map(i => +i));
 				console.log( PreFld );
@@ -160,10 +166,17 @@ const mines = {
 					for (x=0; x<board.x; x++) {
 						let cell = "mines0";
 						if (PreFld[y][x] === 0) cell = "blank";
+						else if (PreFld[y][x] === 1) cell = "flag";
+						else if (PreFld[y][x] === 2) cell = "qmark";
 						else if (Fld[y][x] > 0) cell = `mines${Fld[y][x]}`;
-						else if (Fld[y][x] < 0) cell = "red";
-						else if (Fld[y][x] === 1) cell = "flag";
-						else if (Fld[y][x] === 2) cell = "qmark";
+						else if (Fld[y][x] === -1) cell = "mine";
+						else if (Fld[y][x] === -2) cell = "red";
+
+						if (game_over) {
+							if (Fld[y][x] === -1) cell = "mine";
+							if (PreFld[y][x] === 1 && Fld[y][x] !== -1) cell = "cross";
+						}
+
 						str.push(`<div Y="${y}" X="${x}" class="${cell}"></div>`);
 					}
 				}
@@ -175,11 +188,15 @@ const mines = {
 				window.width = board.w;
 				window.height = board.h;
 
-				// start timer
-				timer_started = true;
-				game_over = false;
-				seconds = Date.now() - (seconds * 1000);
-				Self.dispatch({ type: "start-timer", seconds });
+				Self.flagCount();
+
+				if (game_over) {
+					Self.timeCount();
+				} else {
+					// start timer
+					timer_started = true;
+					Self.dispatch({ type: "start-timer", seconds });
+				}
 				break;
 			case "set-theme":
 				Self.el.content.data({ theme: event.arg });
@@ -213,12 +230,12 @@ const mines = {
 		let seconds = parseInt((Date.now() - start_time) / 1000, 10);
 		let i = this.el.timerSpan.length;
 
-		if (seconds > 1000 || game_over) return;
-
 		seconds = seconds.toString().padStart(i, "0");
 		while (i--) {
 			this.el.timerSpan[i].className = "d"+ seconds.charAt(i);
 		}
+
+		if (seconds > 1000 || game_over) return;
 		setTimeout(this.timeCount.bind(this), 1000);
 	},
 	setMine(xx, yy) {
