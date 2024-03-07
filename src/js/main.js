@@ -100,9 +100,6 @@ const mines = {
 				// reset timer
 				Self.timeCount();
 				break;
-			case "close-success-dialog":
-				//neo.shell("win -dh success");
-				break;
 			case "new-game":
 				nMines = +event.arg || nMines
 				board = sizes[nMines];
@@ -124,6 +121,8 @@ const mines = {
 				Self.el.board.html(str);
 				// fast reference
 				Self.el.blocks = mines.el.board.find("div");
+				// reset content
+				Self.el.content.removeClass("game-won");
 
 				// update window dimensions
 				window.width = board.w;
@@ -315,7 +314,7 @@ const mines = {
 		// update seconds it took to solve
 		this.el.solvedSpan.html(ii);
 		// show dialog
-		//neo.shell("win -ds success");
+		this.el.content.addClass("game-won");
 	}
 };
 
