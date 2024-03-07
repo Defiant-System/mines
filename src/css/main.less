@@ -51,10 +51,10 @@ content {
 			height: 24px;
 			font-weight: 700;
 			font-size: 14px;
-			line-height: 1.35;
+			line-height: 1.75;
 			text-align: center;
 			text-shadow: 0 1px 1px rgba(#111,.2);
-			border-radius: 3px;
+			border-radius: 4px;
 			margin: -3px 1px 5px 0;
 			box-shadow: inset 0 1px 0 rgba(#fff,.15),
 						0px 3px 0px 0px #aaa,
@@ -63,12 +63,13 @@ content {
 			&:before {
 				content: "";
 				position: absolute;
-				top: 3px;
+				top: 0;
 				left: 0;
 				right: 0;
 				bottom: -3px;
 				border-radius: inherit;
 				background-image: radial-gradient(ellipse at bottom center, rgba(#fff,.1), transparent);
+				box-shadow: inset 0 4px 0 rgba(#000,.025);
 				pointer-events: none;
 			}
 
@@ -88,7 +89,9 @@ content {
 			&.mines1,
 			&.mines2,
 			&.mines3,
-			&.mines4 {
+			&.mines4,
+			&.mines5,
+			&.mines6 {
 				background: rgba(#333,.1);
 				position: relative;
 				width: 23px;
@@ -96,38 +99,44 @@ content {
 				margin: 0 3px 3px 0;
 				box-shadow: inset 0 1px 2px rgba(#222,.15);
 
+				&:before {
+					box-shadow: none;
+				}
+
 				&:after {
 					bottom: -1px;
 					background-image: linear-gradient(90deg, transparent, rgba(#fff,.1), transparent);
 				}
 			}
 
-			&.mines1 {
-				&:before {
-					content: "1";
-					color: #afbddb;
-				}
+			&.mines1:before {
+				content: "1";
+				color: #afbddb;
 			}
 
-			&.mines2 {
-				&:before {
-					content: "2";
-					color: #5c5;
-				}
+			&.mines2:before {
+				content: "2";
+				color: #5c5;
 			}
 
-			&.mines3 {
-				&:before {
-					content: "3";
-					color: #f34646;
-				}
+			&.mines3:before {
+				content: "3";
+				color: #f34646;
 			}
 
-			&.mines4 {
-				&:before {
-					content: "4";
-					color: #c4c32c;
-				}
+			&.mines4:before {
+				content: "4";
+				color: #c4c32c;
+			}
+
+			&.mines4:before {
+				content: "5";
+				color: #b6540c;
+			}
+
+			&.mines4:before {
+				content: "6";
+				color: #5fd9e7;
 			}
 		}
 	}
