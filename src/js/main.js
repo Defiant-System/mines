@@ -17,6 +17,14 @@ let game_over = true;
 let SelX, SelY;
 
 
+// default settings
+const defaultSettings = {
+	"game-theme": "modern",
+	"board-size": 20,
+	"pgn": "",
+};
+
+
 
 const mines = {
 	el: {},
@@ -29,7 +37,18 @@ const mines = {
 		this.el.countSpan = window.find(".mine-count span");
 		this.el.solvedSpan = window.find(".seconds-solved");
 		
-		this.dispatch({ type: "new-game", arg: "20" });
+		// get settings, if any
+		this.settings = window.settings.getItem("settings") || defaultSettings;
+		// apply settings
+		this.dispatch({ type: "apply-settings" });
+
+		if (this.settings.pgn) {
+			let pgn = this.settings.pgn;
+			this.dispatch({ type: "game-from-pgn", pgn });
+		} else {
+			let arg = this.settings["board-size"] || 20;
+			this.dispatch({ type: "new-game", arg });
+		}
 
 		// DEV-ONLY-START
 		Test.init(this);
@@ -37,14 +56,40 @@ const mines = {
 	},
 	dispatch(event) {
 		let Self = mines,
-			nn,
-			x, y,
+			name,
+			value,
+			nn, x, y,
 			str,
 			now,
 			block;
-		
+		// console.log(event);
 		switch (event.type) {
+			// system events
+			case "window.close":
+				// save game state
+				Self.settings.pgn = game_over ? "" : Self.dispatch({ type: "output-pgn" });
+				// save settings
+				window.settings.setItem("settings", Self.settings);
+				break;
 			// custom events
+			case "apply-settings":
+				// apply settings
+				for (name in Self.settings) {
+					value = Self.settings[name];
+					// update menu
+					window.bluePrint.selectNodes(`//Menu[@check-group="${name}"]`).map(xMenu => {
+						let xArg = xMenu.getAttribute("arg");
+						xMenu.removeAttribute("is-checked");
+						if (xArg == value) {
+							// update menu item
+							xMenu.setAttribute("is-checked", 1);
+							// call dispatch
+							let type = xMenu.getAttribute("click");
+							Self.dispatch({ type, arg: value});
+						}
+					});
+				}
+				break;
 			case "open-help":
 				karaqu.shell("fs -u '~/help/index.md'");
 				break;
@@ -55,9 +100,7 @@ const mines = {
 
 				SelX = new Number(x);
 				SelY = new Number(y);
-				
 				if (SelX < 0 || SelY < 0 || game_over === true) return;
-
 				if (!timer_started && game_over === "new_board") {
 					timer_started = true;
 					game_over = false;
@@ -74,8 +117,6 @@ const mines = {
 							Self.setOver();
 						}
 					}
-					// console.log( PreFld.join(":") );
-					// console.log( Fld.join(":") );
 				} else {
 					if (Fld[SelY][SelX] >= 0) {
 						Fld[SelY][SelX]++;
@@ -123,7 +164,6 @@ const mines = {
 				Self.el.blocks = mines.el.board.find("div");
 				// reset content
 				Self.el.content.removeClass("game-won");
-
 				// update window dimensions
 				window.width = board.w;
 				window.height = board.h;
@@ -136,13 +176,16 @@ const mines = {
 				}
 				// update smiley
 				Self.el.smiley.removeClass("sad cool");
-
 				// update flag counter
 				Self.flagCount();
 
 				timer_started = false;
 				game_over = "new_board";
+				clearTimeout(Self.timer);
 				Self.el.timerSpan.attr({ "class": "d0" });
+
+				// save "board size" to settings
+				Self.settings["board-size"] = nMines;
 				break;
 			case "game-from-pgn":
 				let pgn = event.pgn.split("\n"),
@@ -204,10 +247,11 @@ const mines = {
 				break;
 			case "set-theme":
 				Self.el.content.data({ theme: event.arg });
+				// save "theme" to settings
+				Self.settings["game-theme"] = event.arg;
 				break;
 			case "output-pgn":
 				str = [];
-
 				Object.keys(sizes).map(key => {
 					if (JSON.stringify(sizes[key]) === JSON.stringify(board)) {
 						let seconds = parseInt((Date.now() - start_time) / 1000, 10),
@@ -219,8 +263,8 @@ const mines = {
 				
 				str.push(Fld.join(":"));
 				str.push(PreFld.join(":"));
-				console.log( str.join("\n") );
-				break;
+				// console.log( str.join("\n") );
+				return str.join("\n");
 		}
 	},
 	flagCount() {
@@ -242,7 +286,7 @@ const mines = {
 		}
 
 		if (seconds > 1000 || game_over) return;
-		setTimeout(this.timeCount.bind(this), 1000);
+		this.timer = setTimeout(this.timeCount.bind(this), 1000);
 	},
 	setMine(xx, yy) {
 		let ddy;

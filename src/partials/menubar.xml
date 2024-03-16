@@ -8,9 +8,9 @@
 			<Menu name="Classic" check-group="game-theme" click="set-theme" arg="classic"/>
 		</Menu>
 		<Menu name="Difficulty">
-			<Menu name="Beginner" check-group="game-option" click="new-game" arg="10"/>
-			<Menu name="Intermediate" check-group="game-option" click="new-game" arg="20" is-checked="1"/>
-			<Menu name="Expert" check-group="game-option" click="new-game" arg="99"/>
+			<Menu name="Beginner" check-group="board-size" click="new-game" arg="10"/>
+			<Menu name="Intermediate" check-group="board-size" click="new-game" arg="20" is-checked="1"/>
+			<Menu name="Expert" check-group="board-size" click="new-game" arg="99"/>
 		</Menu>
 		<Menu type="divider"/>
 		<Menu name="Output PGN" click="output-pgn"/>
