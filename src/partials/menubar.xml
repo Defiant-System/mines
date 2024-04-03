@@ -20,8 +20,6 @@
 	<Menu name="Help">
 		<Menu name="How To Play" click="open-help"/>
 		<Menu type="divider"/>
-		<Menu name="Source Code"/>
-		<Menu type="divider"/>
-		<Menu name="License"/>
+		<Menu name="License" shell="win -al"/>
 	</Menu>
 </MenuBar>
